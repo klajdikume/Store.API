@@ -12,6 +12,8 @@ namespace Core.Interfaces
         //List is very generic list add and removed lists only read at list
         //can be more specific
         Task<IReadOnlyList<Product>> GetProductsAsync();
+        Task<IReadOnlyList<ProductBrand>> GetProductsBrandsAsync();
+        Task<IReadOnlyList<ProductType>> GetProductTypesAsync();
         
     }
 }
