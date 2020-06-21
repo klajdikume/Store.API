@@ -44,6 +44,9 @@ namespace API
             //scoped on http req is alive
             services.AddScoped<IProductRepository, ProductRepository>();
 
+            //on compile time we don't know the type
+            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
+
         }
 
         //middleware
