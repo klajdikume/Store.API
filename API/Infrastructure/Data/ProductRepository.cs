@@ -31,7 +31,7 @@ namespace Infrastructure.Data
             return await _context.Products
                 .Include(p => p.ProductType)
                 .Include(p => p.ProductBrand)
-                .ToListAsync(); //query tree
+                .ToListAsync(); //query tree //needs tolist te be executable to db
         }
 
         public async Task<IReadOnlyList<ProductBrand>> GetProductsBrandsAsync()

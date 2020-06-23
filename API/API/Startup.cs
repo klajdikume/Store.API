@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Helpers;
+using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -47,6 +49,9 @@ namespace API
             //on compile time we don't know the type
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 
+            //add automapper as a service and specify location where automapper is located, assembly where is automaper class
+            services.AddAutoMapper(typeof(MappingProfiles));
+
         }
 
         //middleware
@@ -61,6 +66,9 @@ namespace API
             app.UseHttpsRedirection(); //redirects http routings to https
 
             app.UseRouting(); //get controller that gets hit
+
+            //static files
+            app.UseStaticFiles();
 
             app.UseAuthorization(); //
 
