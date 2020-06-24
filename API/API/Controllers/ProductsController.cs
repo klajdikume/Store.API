@@ -13,9 +13,8 @@ using AutoMapper;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    
+    public class ProductsController : BaseApiController
     {
         //inject store context 
         //private readonly IProductRepository _repo;
