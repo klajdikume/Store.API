@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Errors;
+using API.Extensions;
 using API.Helpers;
 using API.Middleware;
 using AutoMapper;
@@ -42,43 +43,21 @@ namespace API
                 x.UseSqlite(_configuration
                             .GetConnectionString("DefaultConnection")));
 
-            //how long going to be lived
-            //http req create instance
-            //Transient is instantiented on single method short lifetime
-            //Singelton repo on start of ap, never destroyed until is shuted down
-            //scoped on http req is alive
-            services.AddScoped<IProductRepository, ProductRepository>();
-
-            //on compile time we don't know the type
-            services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 
             //add automapper as a service and specify location where automapper is located, assembly where is automaper class
             services.AddAutoMapper(typeof(MappingProfiles));
 
-            services.Configure<ApiBehaviorOptions>(options => 
+
+            services.AddApplicationServices(); //add extensions from appeservicesextensions
+            services.AddSwaggerDocumentation();
+
+            services.AddCors(opt =>
             {
-                options.InvalidModelStateResponseFactory = actionContext =>
+                opt.AddPolicy("CorsPolicy", policy =>
                 {
-                    var errors = actionContext.ModelState
-                    .Where(e => e.Value.Errors.Count > 0)
-                    .SelectMany(x => x.Value.Errors)
-                    .Select(x => x.ErrorMessage).ToArray();
-
-                    var errorResponse = new ApiValidationErrorResponse
-                    {
-                        Errors = errors
-                    };
-
-                    return new BadRequestObjectResult(errorResponse);
-                };
+                    policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                });
             });
-
-            //swagger
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "SkiNet API", Version = "v1" });
-            });
-
         }
 
         //middleware
@@ -103,11 +82,13 @@ namespace API
             //static files
             app.UseStaticFiles();
 
+            app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
+
             app.UseAuthorization(); //
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c => { c.
-                SwaggerEndpoint("/swagger/v1/swagger.json", "SkiNet API v1"); });
+            app.UseSwaggerDocumentation();
 
             app.UseEndpoints(endpoints =>
             {
