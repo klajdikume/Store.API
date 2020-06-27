@@ -22,6 +22,8 @@ namespace API.Extensions
             //scoped on http req is alive
             services.AddScoped<IProductRepository, ProductRepository>();
 
+            services.AddScoped<IBasketRepository,BasketRepository>();
+
             //on compile time we don't know the type
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
 
