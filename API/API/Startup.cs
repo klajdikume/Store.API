@@ -9,6 +9,7 @@ using API.Middleware;
 using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,12 @@ namespace API
                 x.UseSqlite(_configuration
                             .GetConnectionString("DefaultConnection")));
 
-            //addredies
+            services.AddDbContext<AppIdentityDbContext>(x =>
+            {
+                x.UseSqlite(_configuration.GetConnectionString("IdentityConnection"));
+            });
+
+            //add redies
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
                 var configuration = ConfigurationOptions.Parse(_configuration
@@ -58,6 +64,7 @@ namespace API
 
 
             services.AddApplicationServices(); //add extensions from appeservicesextensions
+            services.AddIdentityServices(_configuration); // add identity services
             services.AddSwaggerDocumentation();
 
             services.AddCors(opt =>
