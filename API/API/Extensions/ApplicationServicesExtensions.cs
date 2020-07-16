@@ -23,7 +23,9 @@ namespace API.Extensions
             //scoped on http req is alive
             services.AddScoped<IProductRepository, ProductRepository>();
 
-            services.AddScoped<IBasketRepository,BasketRepository>();
+            services.AddScoped<IOrderService, OrderService>();
+
+            services.AddScoped<IBasketRepository, BasketRepository>();
 
             services.AddScoped<ITokenService, TokenService>();
 

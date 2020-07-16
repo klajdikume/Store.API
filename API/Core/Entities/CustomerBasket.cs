@@ -17,6 +17,6 @@ namespace Core.Entities
         }
 
         public string Id { get; set; } //generated in angular
-        public List<BacketItem> Items { get; set; } = new List<BacketItem>();
+        public List<BasketItem> Items { get; set; } = new List<BasketItem>();
     }
 }

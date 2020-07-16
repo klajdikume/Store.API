@@ -28,6 +28,7 @@ namespace Core.Specifications
         public int Skip { get; private set; }
         public bool IsPagingEnabled { get; private set; }
 
+        //allow to use Include expression
         protected void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
